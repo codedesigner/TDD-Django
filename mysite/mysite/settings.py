@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'south',
     'selenium',
     'fts',
+    'polls',
 )
 
 MIDDLEWARE_CLASSES = (
