@@ -12,9 +12,22 @@ class PollModelTest(TestCase):
         # check we can save it to the database
         poll.save()
 
-        # now check we canfind it in the database again
+        # now check we can find it in the database again
         all_polls_in_database = Poll.objects.all()
         self.assertEquals(len(all_polls_in_database), 1)
         only_poll_in_database = all_polls_in_database[0]
+        self.assertEquals(only_poll_in_database, poll)
+
+        # and check that it's saved its two attributes: question and pub_date
         self.assertEquals(only_poll_in_database.question, "What's up?")
         self.assertEquals(only_poll_in_database.pub_date, poll.pub_date)
+
+    def test_verbose_name_for_pub_date(self):
+        for field in Poll._meta.fields:
+            if field.name == 'pub_date':
+                self.assertEquals(field.verbose_name, 'Date published')
+
+    def test_poll_objects_are_formed_after_their_question(self):
+        p = Poll()
+        p.question = 'How is baby formed?'
+        self.assertEquals(unicode(p), 'How is baby formed?')

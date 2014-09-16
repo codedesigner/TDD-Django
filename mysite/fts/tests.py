@@ -26,6 +26,7 @@ class PollsTest(LiveServerTestCase):
 
         password_field = self.browser.find_element_by_name('password')
         password_field.send_keys('fastest')
+
         password_field.send_keys(Keys.RETURN)
 
         # her username and password are accepted, and she is taken to 
@@ -37,5 +38,52 @@ class PollsTest(LiveServerTestCase):
         polls_links = self.browser.find_elements_by_link_text('Polls')
         self.assertEquals(len(polls_links), 2)
 
+        # The second one looks more exciting, so she clicks it
+        polls_links[1].click()
+
+        # She is taken to the polls listing page, which shows she has
+        # no polls yet
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('0 polls', body.text)
+
+        # She sees a link to 'add' a new poll, so she clicks it
+        new_poll_link = self.browser.find_element_by_link_text('Add poll')
+        new_poll_link.click()
+
+        # She sees some input fields for "Question" and "Date published"
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Question', body.text)
+        self.assertIn('Date published:', body.text)
+
+        # She sees some input fields for "Question" and "Date published"
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Question:', body.text)
+        self.assertIn('Date published:', body.text)
+
+        # She types in an interesting question for the Poll
+        question_field = self.browser.find_element_by_name('question')
+        question_field.send_keys("How awesome is Test-Driven Development?")
+
+        # She sets the date and time of publication - 
+        # it'll be a new year's poll!
+        date_field = self.browser.find_element_by_name('pub_date_0')
+        date_field.send_keys('01/01/14')
+        time_field = self.browser.find_element_by_name('pub_date_1')
+        time_field.send_keys('00:00')
+
+        # Gertrude clicks the save button
+        save_button = self.browser.find_element_by_css_selector("input[value='Save']")
+        save_button.click()
+
+        # She is returned to the "polls" listing, where she can see her
+        # new poll, listed as a clickable link
+        new_poll_link = self.browser.find_elements_by_link_text(
+                "How awesome is Test-Driven Development?"
+                )
+        self.assertEquals(len(new_poll_link), 1)
+
+        # Satisfied, she goes back to sleep.
+
         # TODO: use the admin site to create Poll
-        self.fail('finish this test')
+        #self.fail('todo: finish test')
+        
