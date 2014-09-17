@@ -10,3 +10,6 @@ class Poll(models.Model):
   class Meta:
     #fields = ['question', 'pub_date']
     pass
+
+class Choice(models.Model):
+  poll = models.ForeignKey(Poll)
