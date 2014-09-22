@@ -47,7 +47,7 @@ class ChoiceModelTest(TestCase):
         choice.poll = poll
 
         # give it some text
-        choice.choice = "dojn' fine..."
+        choice.choice = "doin' fine..."
 
         # and let's say it's had some votes
         choice.votes = 3
@@ -65,3 +65,7 @@ class ChoiceModelTest(TestCase):
         self.assertEquals(choice_from_db, choice)
         self.assertEquals(choice_from_db.choice, "doin' fine...")
         self.assertEquals(choice_from_db.votes, 3)
+
+    def test_choice_defaults(self):
+        choice = Choice()
+        self.assertEquals(choice.votes, 0)
